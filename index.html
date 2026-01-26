@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Honey Entertainment | Sajeeb Saha</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root { --gold: #FFD700; --pink: #ff00ff; --cyan: #00ffff; --tiktok-red: #ff0050; --tiktok-blue: #00f2ea; --yt-red: #FF0000; }
+        body { margin: 0; padding: 0; background: #000; color: white; font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
+
+        /* --- নতুন: ঝাপসা ফুল ও জমা হওয়া --- */
+        .flower {
+            position: fixed; top: -50px; z-index: -1;
+            user-select: none; pointer-events: none;
+            filter: blur(1.5px); /* হালকা ঘোলা */
+            animation: fall linear forwards;
+        }
+        @keyframes fall {
+            to { top: calc(100vh - 20px); transform: rotate(360deg); } /* নিচে এসে থামবে */
+        }
+        #flower-pile {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            height: 0; background: rgba(255, 20, 147, 0.1);
+            z-index: -2; transition: height 15s linear; /* ০.৫ সেমি পুরু হবে */
+        }
+
+        /* হলুদ বিড়াল ব্যাকগ্রাউন্ড */
+        .bg-cat {
+            position: fixed; width: 480px; height: auto; z-index: -1;
+            filter: blur(2px) opacity(0.5); pointer-events: none;
+        }
+        .cat1 { top: 50%; left: -150px; animation: move1 22s infinite linear; }
+        .cat2 { bottom: 50%; right: -150px; animation: move2 28s infinite linear; }
+
+        @keyframes move1 {
+            0% { transform: translateX(0) rotate(0deg); }
+            50% { transform: translateX(120vw) rotate(10deg); }
+            100% { transform: translateX(0) rotate(0deg); }
+        }
+        @keyframes move2 {
+            0% { transform: translateX(0) rotate(0deg); }
+            50% { transform: translateX(-120vw) rotate(-10deg); }
+            100% { transform: translateX(0) rotate(0deg); }
+        }
+
+        .container { padding: 40px 0; max-width: 600px; margin: auto; text-align: center; }
+
+        /* অরিজিনাল ওয়েভ বার */
+        .wave-bar {
+            display: flex; align-items: center; justify-content: center;
+            width: 100vw; margin-left: calc(-50vw + 50%);
+            padding: 65px 0; margin-bottom: 50px;
+            text-decoration: none; color: #FFFFFF; font-size: 38px; font-weight: 900;
+            background: #000; position: relative; overflow: hidden;
+            transition: 0.4s ease;
+            clip-path: polygon(0 0, 50% 25%, 100% 0, 100% 100%, 50% 75%, 0 100%);
+            border-top: 2px solid var(--gold); border-bottom: 2px solid var(--gold);
+        }
+        .wave-bar span { position: relative; z-index: 2; text-shadow: 0 0 10px rgba(0,0,0,0.8); }
+        .wave-bar::before {
+            content: ""; position: absolute; top: 0; left: 0; width: 200%; height: 100%;
+            background: repeating-linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3) 5%, var(--gold) 10%, var(--cyan) 15%, transparent 20%);
+            animation: riverFlow 4s infinite linear; z-index: 1; opacity: 0.7;
+        }
+        @keyframes riverFlow { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .wave-bar:hover { transform: scaleY(1.15); box-shadow: 0 0 50px var(--gold); }
+        .wave-bar:hover::before { animation-duration: 0.8s; opacity: 1; }
+
+        .social-side-bar {
+            display: flex; align-items: center; width: 280px; margin-left: -40px; 
+            padding: 15px 30px 15px 60px; margin-bottom: 15px;
+            text-decoration: none; color: white; font-weight: 800; font-size: 18px;
+            background: rgba(255, 255, 255, 0.05); border: 2px solid var(--cyan);
+            border-radius: 0 40px 40px 0; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .tiktok-bar:hover { width: 320px; transform: translateX(25px); background: #010101; border-color: #fff; box-shadow: -4px 0 var(--tiktok-red), 4px 0 var(--tiktok-blue), 0 0 20px rgba(255,255,255,0.4); text-shadow: 2px 2px var(--tiktok-red), -2px -2px var(--tiktok-blue); }
+        .youtube-bar { border-color: var(--yt-red); }
+        .youtube-bar:hover { width: 320px; transform: translateX(25px); background: linear-gradient(90deg, #FF0000, #CC0000); color: #fff; border-color: #fff; box-shadow: 0 0 30px rgba(255, 0, 0, 0.6); }
+
+        /* অরিজিনাল Stay with us */
+        .stay-text {
+            font-family: 'Great Vibes', cursive; font-size: 60px; margin-top: 35px; margin-bottom: 0;
+            display: inline-block; background: linear-gradient(90deg, var(--pink), var(--cyan), var(--gold), var(--pink));
+            background-size: 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: glowText 10s linear infinite, slowFloat 6s ease-in-out infinite; transition: 0.5s; cursor: pointer;
+        }
+        @keyframes glowText { 0% { background-position: 0%; } 100% { background-position: 300%; } }
+        @keyframes slowFloat { 0%, 100% { transform: translateY(0) rotate(-0.5deg); } 50% { transform: translateY(-8px) rotate(0.5deg); } }
+        .stay-text:hover { animation: glowText 3s linear infinite, gentleShake 0.5s ease-in-out infinite; filter: drop-shadow(0 0 15px var(--cyan)); }
+
+        .premium-divider { display: flex; align-items: center; justify-content: center; margin: 5px auto 40px auto; gap: 15px; }
+        .line { height: 2px; width: 80px; background: linear-gradient(to right, transparent, var(--gold), transparent); }
+        .diamond { color: var(--gold); font-size: 14px; transform: rotate(45deg); text-shadow: 0 0 10px var(--gold); }
+
+        .owner-container {
+            display: inline-flex; justify-content: center; align-items: center;
+            margin: 40px 0; position: relative; padding: 2px;
+            background: linear-gradient(90deg, var(--pink), var(--cyan), var(--gold), var(--pink));
+            background-size: 300%; animation: glowText 5s linear infinite;
+            border-radius: 30px; overflow: hidden;
+        }
+        .owner-row { display: flex; background: #000; border-radius: 28px; overflow: hidden; }
+        .owner-part { padding: 15px 20px; text-decoration: none; border: none; font-size: 16px; }
+        .left-p { color: #ccc; background: rgba(255, 255, 255, 0.05); pointer-events: none; }
+        .right-p { color: white; font-weight: 800; background: rgba(255, 255, 255, 0.1); transition: 0.4s; position: relative; z-index: 5; }
+        .right-p:hover { transform: translateY(-5px) scale(1.05); background: var(--cyan); color: #000; box-shadow: 0 0 20px var(--cyan); }
+
+        .thank-you { 
+            padding: 18px 55px; 
+            border-radius: 20px 50px 20px 50px; 
+            border: none; 
+            background: linear-gradient(45deg, var(--pink), var(--cyan)); 
+            color: white; font-size: 24px; font-weight: bold; cursor: pointer; 
+            transition: all 0.4s ease; margin-top: 20px;
+            animation: floating 3s infinite ease-in-out; 
+        }
+        @keyframes floating { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-5px) rotate(1deg); } }
+        .thank-you:hover { transform: scale(1.15); animation: shake 0.3s infinite alternate; box-shadow: 0 0 30px var(--pink); }
+
+        .footer-text { font-size: 12px; color: rgba(255, 255, 255, 0.4); margin-top: 50px; margin-bottom: 20px; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+<div id="flower-pile"></div>
+
+<img src="https://i.pinimg.com/736x/0f/29/54/0f295418af63e6113c6a349aa6b8d49e.jpg" class="bg-cat cat1" alt="cat">
+<img src="https://i.pinimg.com/1200x/46/2f/da/462fda1237589806606e5c935a1a3a42.jpg" class="bg-cat cat2" alt="cat">
+
+<div class="container">
+    <a href="https://www.facebook.com/share/1LdcdP5qkH/" class="wave-bar"><span>Honey Entertainment</span></a>
+    <a href="https://www.tiktok.com/@honey_owner_sajeeb?_r=1&_t=ZS-93N7RQiM6K1" class="social-side-bar tiktok-bar"><i class="fab fa-tiktok" style="margin-right: 12px;"></i> Honey Entertainment ✅ Follow</a>
+    <a href="https://youtube.com/@honey_sajeeb?si=j9_aeB17HTxleJQ5" class="social-side-bar youtube-bar"><i class="fab fa-youtube" style="margin-right: 12px;"></i> Honey Entertainment (HE) Subscribe</a>
+
+    <h2 class="stay-text">Stay with us</h2>
+    <div class="premium-divider"><div class="line"></div><div class="diamond">◆</div><div class="line"></div></div>
+
+    <div class="owner-container">
+        <div class="owner-row">
+            <div class="owner-part left-p">The sites are managed by</div>
+            <a href="https://www.facebook.com/share/1APs4hT9DY/" class="owner-part right-p">Sajeeb Saha</a>
+        </div>
+    </div>
+
+    <br>
+    <button class="thank-you" onclick="celebrate()">Thank You</button>
+    <div class="footer-text">© sajeeb-honey entertainment</div>
+</div>
+
+<script>
+    // ফুল তৈরির ফাংশন
+    function createFlower() {
+        const flower = document.createElement('div');
+        flower.className = 'flower';
+        flower.innerHTML = Math.random() > 0.5 ? '🌸' : '🌺';
+        flower.style.left = Math.random() * 100 + 'vw';
+        flower.style.fontSize = (Math.random() * 20 + 15) + 'px';
+        flower.style.animationDuration = (Math.random() * 5 + 5) + 's';
+        document.body.appendChild(flower);
+        
+        // নিচে জমানো শুরু (০.৫ সেমি = ১৯ পিক্সেল প্রায়)
+        setTimeout(() => {
+            document.getElementById('flower-pile').style.height = '19px';
+        }, 1000);
+    }
+    setInterval(createFlower, 800);
+
+    function celebrate() {
+        var count = 200;
+        var defaults = { origin: { y: 0.7 } };
+        function fire(particleRatio, opts) {
+            confetti(Object.assign({}, defaults, opts, { particleCount: Math.floor(count * particleRatio) }));
+        }
+        fire(0.25, { spread: 26, startVelocity: 55 });
+        fire(0.2, { spread: 60 });
+        fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+        fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+        fire(0.1, { spread: 120, startVelocity: 45 });
+    }
+</script>
+
+</body>
+</html>
